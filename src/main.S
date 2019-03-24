@@ -42,6 +42,6 @@ sawtooth:
 
 sawtooth_reset:
   mov r7, 0x8000
-  mov r6, 136
+  mov r6, 480
   b sawtooth
 .size main, .-main
