@@ -4,44 +4,29 @@
 
 .type main, %function
 main:
-  bl init @ setup headphone jack
-  mov r7 , 33421 @ r7 is the value for r0
-  @ 240 Hz Triangle Wave
-  mov r6, 480 @ sawtooth wave counter
-  mov r8, 100 @ triangle_up counter
-  mov r9, 100 @ triangle_down counter
-  b sawtooth_reset
-
-triangle_up:
-  mov r9, 100 @ Reset down counter
-  add r7, 655
+  bl init
+  mov r4, #0 @counter
+  mov r5, #0 @counter
+  mov r7, #32767
+  b up
+up:
+  mov r5, #0
+  add r7, #395
   mov r0, r7
   bl BSP_AUDIO_OUT_Play_Sample
-  subs r8, 1
-  beq triangle_down
-  b triangle_up
+  add r4, #1
+  cmp r4, #100
+  bhi down
+  b up
 
-triangle_down:
-  mov r6, 480
-  mov r8, 100 @ Reset up counter
-  sub r7, 655
+down:
+  mov r4, #0
+  sub r7, #259
   mov r0, r7
   bl BSP_AUDIO_OUT_Play_Sample
-  subs r9, 1
-  beq triangle_up
-  b triangle_down
+  add r5, #1
+  cmp r5, #100
+  bhi up
+  b down
 
-@ 100Hz
-sawtooth:
-  add r7, 136
-  mov r0, r7
-  bl BSP_AUDIO_OUT_Play_Sample
-  subs r6, 1
-  beq sawtooth_reset
-  b sawtooth
-
-sawtooth_reset:
-  mov r7, 0x8000
-  mov r6, 480
-  b sawtooth
 .size main, .-main
