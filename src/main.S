@@ -5,14 +5,13 @@
 .type main, %function
 main:
   bl init @ setup headphone jack
-  mov r7 , 33421 @ r7 is the value for r0
-  @ 240 Hz Triangle Wave
+  mov r7 , 0x8000 @ r7 is the value for r0
   mov r6, 480 @ sawtooth wave counter
   mov r8, 100 @ triangle_up counter
   mov r9, 100 @ triangle_down counter
   mov r10, 0 @ r10 is a counter for switch to sawtooth wave
-  b triangle_up
 
+@ 240 Hz Triangle Wave
 triangle_up:
   mov r9, 100 @ Reset down counter
   add r7, 655
@@ -36,7 +35,7 @@ triangle_down:
   beq triangle_up
   b triangle_down
 
-@ 100Hz
+@ 100Hz Sawtooth Wave
 sawtooth:
   add r7, 136
   mov r0, r7
